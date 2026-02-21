@@ -4,26 +4,6 @@ This is the backend server for the MoveInSync application, built with Node.js, E
 
 ## Setup and Run
 
-1. **Install dependencies:**
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-2. **Environment Variables:**
-   Ensure you have a \`.env\` file in the root directory. It should contain at least your database URL and email credentials (for OTP):
-   \`\`\`env
-   DATABASE_URL="your-database-url"
-   EMAIL_USER="your-email@gmail.com"
-   EMAIL_PASS="your-email-app-password"
-   PORT=3000
-   \`\`\`
-
-3. **Run the server (Development):**
-   \`\`\`bash
-   npm run dev
-   # OR using ts-node directly
-   npx ts-node src/index.ts
-   \`\`\`
 
 ## API Endpoints
 
