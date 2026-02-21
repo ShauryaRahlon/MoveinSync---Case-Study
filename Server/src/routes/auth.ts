@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 const router = Router();
 
-// 1. REGISTER & SEND OTP
+// Register
 router.post('/register', async (req, res) => {
     const { email, password, name } = req.body;
     const otp = Math.floor(100000 + Math.random() * 600000).toString();
@@ -26,10 +26,22 @@ router.post('/register', async (req, res) => {
             },
         });
 
-        await sendOTPEmail(email, otp);
-        res.status(201).json({ message: "OTP sent to email", userId: user.id });
-    } catch (e) {
-        res.status(400).json({ error: "User already exists or data invalid" });
+        try {
+            await sendOTPEmail(email, otp);
+            res.status(201).json({ message: "OTP sent to email", userId: user.id });
+
+        } catch (emailError: any) {
+            console.error("Email sending failed:", emailError);
+
+            res.status(201).json({
+                message: "User registered in DB, but failed to send OTP email. Check server console.",
+                userId: user.id,
+                error: emailError.message
+            });
+        }
+    } catch (e: any) {
+        console.error("Database error during registration:", e);
+        res.status(400).json({ error: "User already exists or data invalid", details: e.message });
     }
 });
 
