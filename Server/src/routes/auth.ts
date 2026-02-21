@@ -2,6 +2,8 @@
 import { Router } from 'express';
 import prisma from '../db';
 import { sendOTPEmail } from '../utils/mailer';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -12,10 +14,12 @@ router.post('/register', async (req, res) => {
     const expiry = new Date(Date.now() + 10 * 60000); // 10 mins
 
     try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await prisma.user.create({
             data: {
                 email,
-                password, // In production, hash this with bcrypt!
+                password: hashedPassword,
                 name,
                 verificationOtp: otp,
                 otpExpiry: expiry,
@@ -51,6 +55,42 @@ router.post('/verify', async (req, res) => {
     });
 
     res.json({ message: "Account verified!", user: updatedUser });
+});
+
+// 3. LOGIN
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid email or password" });
+        }
+
+        if (!user.isVerified) {
+            return res.status(400).json({ error: "Please verify your email first" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ error: "Invalid email or password" });
+        }
+
+        const token = jwt.sign(
+            { userId: user.id, role: user.role },
+            process.env.JWT_SECRET || 'secret123',
+            { expiresIn: '7d' }
+        );
+
+        res.json({
+            message: "Login successful",
+            token,
+            user: { id: user.id, email: user.email, name: user.name }
+        });
+    } catch (e) {
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 export default router;

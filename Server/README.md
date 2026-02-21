@@ -76,3 +76,28 @@ This is the backend server for the MoveInSync application, built with Node.js, E
     }
   }
   \`\`\`
+
+* **POST `/auth/login`**
+  Logs in an existing, verified user and returns a JSON Web Token (JWT) for authentication.
+  
+  **Headers:** `Content-Type: application/json`
+  **Request Body:**
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "yourpassword"
+  }
+  ```
+  
+  **Response:** `200 OK`
+  ```json
+  {
+    "message": "Login successful",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI...",
+    "user": {
+        "id": "12345-abcde",
+        "email": "user@example.com",
+        "name": "John Doe"
+    }
+  }
+  ```
