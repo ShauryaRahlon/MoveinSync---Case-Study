@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import pool from "./db";
+import prisma from "./db";
 
 const app = express()
 
@@ -14,10 +14,10 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/test-health', async (req: Request, res: Response) => {
     try {
         // console.log("checking health")
-        const result = await pool.query("SELECT NOW()");
+        const result: any[] = await prisma.$queryRaw`SELECT NOW()`;
         res.json({
             message: "Database is working",
-            time: result.rows[0].now
+            time: result[0].now
         })
     } catch (err) {
         console.log(err);

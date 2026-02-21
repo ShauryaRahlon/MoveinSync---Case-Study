@@ -1,19 +1,15 @@
-import { Pool } from "pg";
-import dotenv from "dotenv";
+import { PrismaClient } from '@prisma/client';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+// Initialize the Neon adapter using the pooled connection
+const adapter = new PrismaNeon({
+    connectionString: process.env.DATABASE_URL!
 });
 
-pool.connect().then(() => {
-    console.log("Connected to database");
-}).catch((err) => {
-    console.log(err);
-});
+// Pass the adapter directly into the Prisma Client constructor
+const prisma = new PrismaClient({ adapter });
 
-export default pool;
+export default prisma;

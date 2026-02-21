@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+
+// Models a system user
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String    // Stores the hashed password
+  name            String
+  role            String    @default("USER") 
+  isVerified      Boolean   @default(false) // <-- Tracks if email is verified
+  verificationOtp String?                   // <-- Stores the temporary 6-digit OTP
+  otpExpiry       DateTime?                 // <-- Expiration timestamp for the OTP
+  bookings        Booking[]
+  createdAt       DateTime  @default(now())
+}
+
+// Models a physical Metro Stop
+model Stop {
+  id               String      @id @default(uuid())
+  name             String      @unique
+  routes           RouteStop[] 
+  bookingsAsSource Booking[]   @relation("SourceStop")
+  bookingsAsDest   Booking[]   @relation("DestStop")
+  createdAt        DateTime    @default(now())
+}
+
+// Models a Metro Line (e.g., Yellow Line)
+model Route {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  color     String
+  stops     RouteStop[] 
+  createdAt DateTime    @default(now())
+}
+
+// Mapping table to handle the Many-to-Many relationship and maintain order
+model RouteStop {
+  id            String   @id @default(uuid())
+  stopId        String
+  routeId       String
+  sequenceOrder Int      
+  
+  stop          Stop     @relation(fields: [stopId], references: [id], onDelete: Cascade)
+  route         Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@unique([stopId, routeId])
+  @@index([routeId, sequenceOrder]) 
+}
+
+// Models the user's generated ticket/route
+model Booking {
+  id                String   @id @default(uuid())
+  userId            String   // <-- Links the booking to a specific user
+  sourceStopId      String
+  destinationStopId String
+  qrString          String   @unique 
+  routeDetails      Json     
+  status            String   @default("CONFIRMED")
+  createdAt         DateTime @default(now())
+
+  user              User     @relation(fields: [userId], references: [id]) // <-- Relation mapping
+  sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id])
+  destinationStop   Stop     @relation("DestStop", fields: [destinationStopId], references: [id])
+}
