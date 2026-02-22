@@ -1,0 +1,186 @@
+{
+  "stops": [
+    "Samaypur Badli", "Rohini Sector 18-19", "Haiderpur Badli Mor",
+    "Jahangirpuri", "Adarsh Nagar", "Azadpur", "Model Town",
+    "GTB Nagar", "Vishwavidyalaya", "Vidhan Sabha",
+    "Civil Lines", "Kashmere Gate", "Chandni Chowk",
+    "Chawri Bazar", "New Delhi", "Rajiv Chowk",
+    "Patel Chowk", "Central Secretariat", "Udyog Bhawan",
+    "Race Course", "Jor Bagh", "INA", "AIIMS",
+    "Green Park", "Hauz Khas", "Malviya Nagar",
+    "Saket", "Qutab Minar", "Chhattarpur", "Sultanpur",
+    "Ghitorni", "Arjan Garh", "Guru Dronacharya",
+    "Sikanderpur", "MG Road", "IFFCO Chowk", "Huda City Centre",
+
+    "Dwarka Sector 21", "Dwarka Sector 8", "Dwarka Sector 9",
+    "Dwarka Sector 10", "Dwarka Sector 11", "Dwarka Sector 12",
+    "Dwarka Sector 13", "Dwarka Sector 14", "Dwarka",
+    "Dwarka Mor", "Nawada", "Uttam Nagar East", "Uttam Nagar West",
+    "Janakpuri West", "Janakpuri East", "Tilak Nagar",
+    "Subhash Nagar", "Tagore Garden", "Rajouri Garden",
+    "Ramesh Nagar", "Moti Nagar", "Kirti Nagar",
+    "Shadipur", "Patel Nagar", "Rajender Place",
+    "Karol Bagh", "Jhandewalan", "RK Ashram Marg",
+    "Barakhamba Road", "Mandi House",
+    "Pragati Maidan", "Indraprastha", "Yamuna Bank",
+    "Akshardham", "Mayur Vihar Phase 1", "Mayur Vihar Extension",
+    "New Ashok Nagar", "Noida Sector 15", "Noida Sector 16",
+    "Noida Sector 18", "Botanical Garden", "Golf Course",
+    "Noida City Centre", "Noida Sector 34", "Noida Sector 52",
+    "Noida Sector 61", "Noida Sector 59", "Noida Sector 62",
+    "Noida Electronic City",
+
+    "Dilshad Garden", "Jhilmil", "Mansarovar Park",
+    "Shahdara", "Welcome", "Seelampur", "Shastri Park",
+    "Tis Hazari", "Pul Bangash", "Pratap Nagar",
+    "Shastri Nagar", "Inder Lok", "Kanhaiya Nagar",
+    "Keshav Puram", "Netaji Subhash Place", "Kohat Enclave",
+    "Pitampura", "Rohini East", "Rohini West",
+    "Rithala",
+
+    "Mundka", "Mundka Industrial Area", "Ghevra",
+    "Tikri Kalan", "Tikri Border", "Pandit Shree Ram Sharma",
+    "Bahadurgarh City", "Brigadier Hoshiyar Singh",
+
+    "Botanical Garden (Magenta)", "Okhla Bird Sanctuary",
+    "Kalkaji Mandir", "Nehru Enclave", "Greater Kailash",
+    "Chirag Delhi", "Panchsheel Park", "Hauz Khas (Magenta)",
+    "IIT Delhi", "R.K. Puram", "Munirka", "Vasant Vihar",
+    "Shankar Vihar", "Terminal 1 IGI Airport",
+    "Sadar Bazar Cantonment", "Palam", "Dashrath Puri",
+    "Janakpuri West (Magenta)",
+
+    "New Delhi (Orange)", "Shivaji Stadium", "Dhaula Kuan",
+    "Delhi Aerocity", "IGI Airport", "Dwarka Sector 21 (Orange)",
+
+    "Majlis Park", "Azadpur (Pink)", "Shalimar Bagh",
+    "Netaji Subhash Place (Pink)", "Shakurpur", "Punjabi Bagh West",
+    "ESI Hospital", "Rajouri Garden (Pink)", "Madipur",
+    "Shivaji Park", "Peeragarhi", "Paschim Vihar East",
+    "Paschim Vihar West", "Durgabai Deshmukh South Campus",
+    "Sir Vishweshwaraiah Moti Bagh", "Bhikaji Cama Place",
+    "Sarojini Nagar", "INA (Pink)", "South Extension",
+    "Lajpat Nagar", "Vinobapuri", "Ashram",
+    "Hazrat Nizamuddin", "Mayur Vihar Phase 1 (Pink)",
+    "Mayur Vihar Pocket 1", "Trilokpuri Sanjay Lake",
+    "East Vinod Nagar", "Mandawali West Vinod Nagar",
+    "IP Extension", "Anand Vihar", "Karkarduma",
+    "Karkarduma Court", "Krishna Nagar", "East Azad Nagar",
+    "Jaffrabad", "Maujpur", "Gokulpuri",
+    "Johri Enclave", "Shiv Vihar"
+  ],
+  "routes": [
+    {
+      "name": "Yellow Line",
+      "color": "#FFD700",
+      "stops": [
+        "Samaypur Badli", "Rohini Sector 18-19", "Haiderpur Badli Mor",
+        "Jahangirpuri", "Adarsh Nagar", "Azadpur", "Model Town",
+        "GTB Nagar", "Vishwavidyalaya", "Vidhan Sabha",
+        "Civil Lines", "Kashmere Gate", "Chandni Chowk",
+        "Chawri Bazar", "New Delhi", "Rajiv Chowk",
+        "Patel Chowk", "Central Secretariat", "Udyog Bhawan",
+        "Race Course", "Jor Bagh", "INA", "AIIMS",
+        "Green Park", "Hauz Khas", "Malviya Nagar",
+        "Saket", "Qutab Minar", "Chhattarpur", "Sultanpur",
+        "Ghitorni", "Arjan Garh", "Guru Dronacharya",
+        "Sikanderpur", "MG Road", "IFFCO Chowk", "Huda City Centre"
+      ]
+    },
+    {
+      "name": "Blue Line",
+      "color": "#0000FF",
+      "stops": [
+        "Dwarka Sector 21", "Dwarka Sector 8", "Dwarka Sector 9",
+        "Dwarka Sector 10", "Dwarka Sector 11", "Dwarka Sector 12",
+        "Dwarka Sector 13", "Dwarka Sector 14", "Dwarka",
+        "Dwarka Mor", "Nawada", "Uttam Nagar East", "Uttam Nagar West",
+        "Janakpuri West", "Janakpuri East", "Tilak Nagar",
+        "Subhash Nagar", "Tagore Garden", "Rajouri Garden",
+        "Ramesh Nagar", "Moti Nagar", "Kirti Nagar",
+        "Shadipur", "Patel Nagar", "Rajender Place",
+        "Karol Bagh", "Jhandewalan", "RK Ashram Marg",
+        "Rajiv Chowk", "Barakhamba Road", "Mandi House",
+        "Pragati Maidan", "Indraprastha", "Yamuna Bank",
+        "Akshardham", "Mayur Vihar Phase 1", "Mayur Vihar Extension",
+        "New Ashok Nagar", "Noida Sector 15", "Noida Sector 16",
+        "Noida Sector 18", "Botanical Garden", "Golf Course",
+        "Noida City Centre"
+      ]
+    },
+    {
+      "name": "Blue Line Branch",
+      "color": "#0000CC",
+      "stops": [
+        "Yamuna Bank",
+        "Noida Sector 34", "Noida Sector 52",
+        "Noida Sector 61", "Noida Sector 59", "Noida Sector 62",
+        "Noida Electronic City"
+      ]
+    },
+    {
+      "name": "Red Line",
+      "color": "#FF0000",
+      "stops": [
+        "Dilshad Garden", "Jhilmil", "Mansarovar Park",
+        "Shahdara", "Welcome", "Seelampur", "Shastri Park",
+        "Kashmere Gate", "Tis Hazari", "Pul Bangash", "Pratap Nagar",
+        "Shastri Nagar", "Inder Lok", "Kanhaiya Nagar",
+        "Keshav Puram", "Netaji Subhash Place", "Kohat Enclave",
+        "Pitampura", "Rohini East", "Rohini West",
+        "Rithala"
+      ]
+    },
+    {
+      "name": "Green Line",
+      "color": "#00AA00",
+      "stops": [
+        "Mundka", "Mundka Industrial Area", "Ghevra",
+        "Tikri Kalan", "Tikri Border", "Pandit Shree Ram Sharma",
+        "Bahadurgarh City", "Brigadier Hoshiyar Singh"
+      ]
+    },
+    {
+      "name": "Violet Line",
+      "color": "#800080",
+      "stops": [
+        "Kashmere Gate", "Lal Quila", "Jama Masjid",
+        "Delhi Gate", "ITO", "Mandi House",
+        "Janpath", "Central Secretariat",
+        "Khan Market", "Jawaharlal Nehru Stadium",
+        "Kalkaji Mandir", "Nehru Enclave",
+        "Greater Kailash", "Chirag Delhi",
+        "Panchsheel Park", "Botanical Garden"
+      ]
+    },
+    {
+      "name": "Airport Express",
+      "color": "#FF8C00",
+      "stops": [
+        "New Delhi", "Shivaji Stadium", "Dhaula Kuan",
+        "Delhi Aerocity", "IGI Airport", "Dwarka Sector 21"
+      ]
+    },
+    {
+      "name": "Pink Line",
+      "color": "#FF69B4",
+      "stops": [
+        "Majlis Park", "Azadpur", "Shalimar Bagh",
+        "Netaji Subhash Place", "Shakurpur", "Punjabi Bagh West",
+        "ESI Hospital", "Rajouri Garden", "Madipur",
+        "Shivaji Park", "Peeragarhi", "Paschim Vihar East",
+        "Paschim Vihar West", "Durgabai Deshmukh South Campus",
+        "Sir Vishweshwaraiah Moti Bagh", "Bhikaji Cama Place",
+        "Sarojini Nagar", "INA", "South Extension",
+        "Lajpat Nagar", "Vinobapuri", "Ashram",
+        "Hazrat Nizamuddin", "Mayur Vihar Phase 1",
+        "Mayur Vihar Pocket 1", "Trilokpuri Sanjay Lake",
+        "East Vinod Nagar", "Mandawali West Vinod Nagar",
+        "IP Extension", "Anand Vihar", "Karkarduma",
+        "Karkarduma Court", "Krishna Nagar", "East Azad Nagar",
+        "Jaffrabad", "Maujpur", "Gokulpuri",
+        "Johri Enclave", "Shiv Vihar"
+      ]
+    }
+  ]
+}
