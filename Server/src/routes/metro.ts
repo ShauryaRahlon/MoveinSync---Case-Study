@@ -1,30 +1,38 @@
 import { Router } from 'express';
 import { authenticate, authorizeAdmin } from '../middleware';
 import * as metroController from '../controllers/metro';
+import * as routeController from '../controllers/route';
 
 const router = Router();
 
-// All metro admin routes require authentication + admin role
-router.use(authenticate, authorizeAdmin);
+// ─── PUBLIC ROUTES (any authenticated user) ─────────────────────
 
-// ─── STOP ROUTES ────────────────────────────────────────────────
+// Find optimal route between two stops
+router.get('/find-route', authenticate, routeController.findRoute);
 
-router.post('/stops', metroController.createStop);
-router.get('/stops', metroController.getAllStops);
-router.get('/stops/:id', metroController.getStopById);
-router.put('/stops/:id', metroController.updateStop);
-router.delete('/stops/:id', metroController.deleteStop);
+// ─── ADMIN-ONLY ROUTES ──────────────────────────────────────────
 
-// ─── ROUTE (METRO LINE) ROUTES ──────────────────────────────────
+// Rebuild the in-memory graph after data changes
+router.post('/refresh-graph', authenticate, authorizeAdmin, routeController.refreshGraph);
 
-router.post('/routes', metroController.createRoute);
-router.get('/routes', metroController.getAllRoutes);
-router.get('/routes/:id', metroController.getRouteById);
-router.put('/routes/:id', metroController.updateRoute);
-router.delete('/routes/:id', metroController.deleteRoute);
+// ─── STOP ROUTES (admin only) ───────────────────────────────────
 
-// ─── BULK IMPORT ────────────────────────────────────────────────
+router.post('/stops', authenticate, authorizeAdmin, metroController.createStop);
+router.get('/stops', authenticate, authorizeAdmin, metroController.getAllStops);
+router.get('/stops/:id', authenticate, authorizeAdmin, metroController.getStopById);
+router.put('/stops/:id', authenticate, authorizeAdmin, metroController.updateStop);
+router.delete('/stops/:id', authenticate, authorizeAdmin, metroController.deleteStop);
 
-router.post('/bulk-import', metroController.bulkImport);
+// ─── ROUTE (METRO LINE) ROUTES (admin only) ─────────────────────
+
+router.post('/routes', authenticate, authorizeAdmin, metroController.createRoute);
+router.get('/routes', authenticate, authorizeAdmin, metroController.getAllRoutes);
+router.get('/routes/:id', authenticate, authorizeAdmin, metroController.getRouteById);
+router.put('/routes/:id', authenticate, authorizeAdmin, metroController.updateRoute);
+router.delete('/routes/:id', authenticate, authorizeAdmin, metroController.deleteRoute);
+
+// ─── BULK IMPORT (admin only) ───────────────────────────────────
+
+router.post('/bulk-import', authenticate, authorizeAdmin, metroController.bulkImport);
 
 export default router;

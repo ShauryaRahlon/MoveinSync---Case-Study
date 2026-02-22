@@ -339,13 +339,119 @@ This is the backend server for the MoveInSync application, built with Node.js, E
 
 ---
 
+### 6. Route Finding (Graph-Based)
+
+> **Auth Required:** `Authorization: Bearer <JWT>` — any authenticated user (no admin needed).
+
+The metro graph is built **once** on server startup and cached in memory. Route computation uses Dijkstra's algorithm with interchange penalties.
+
+* **GET `/metro/find-route?from=<stopId>&to=<stopId>&strategy=<strategy>`**
+  Find the optimal route between two stops.
+
+  **Query Parameters:**
+  | Param | Required | Description |
+  |-------|----------|-------------|
+  | `from` | Yes | Source stop UUID |
+  | `to` | Yes | Destination stop UUID |
+  | `strategy` | No | `minimum_stops`, `minimum_transfers`, or `balanced` (default) |
+
+  **Strategy Behavior:**
+  | Strategy | What it optimizes |
+  |----------|-------------------|
+  | `minimum_stops` | Fewest total stations (ignores transfers) |
+  | `minimum_transfers` | Avoids line changes even if more stops |
+  | `balanced` | Best mix of fewer stops + fewer transfers |
+
+  **Example Request:**
+  ```
+  GET http://localhost:3000/metro/find-route?from=d695fbb3-2b86-48fc-b46d-6b09bc66d936&to=1d29c982-eb36-48c3-a32b-4f1be1477dde&strategy=minimum_transfers
+  ```
+
+  **Response:** `200 OK`
+  ```json
+  {
+    "strategy": "minimum_transfers",
+    "route": {
+      "source": "Adarsh Nagar",
+      "destination": "Akshardham",
+      "totalStops": 18,
+      "totalTransfers": 1,
+      "segments": [
+        {
+          "line": {
+            "id": "1b9f55f3-d8c0-4a0f-b94a-8cda1123293c",
+            "name": "Yellow Line",
+            "color": "#FFD700"
+          },
+          "from": "Adarsh Nagar",
+          "to": "Rajiv Chowk",
+          "stops": [
+            "Adarsh Nagar", "Azadpur", "Model Town", "GTB Nagar",
+            "Vishwavidyalaya", "Vidhan Sabha", "Civil Lines",
+            "Kashmere Gate", "Chandni Chowk", "Chawri Bazar",
+            "New Delhi", "Rajiv Chowk"
+          ],
+          "stopCount": 12
+        },
+        {
+          "interchange": "Barakhamba Road",
+          "fromLine": "Yellow Line",
+          "toLine": "Blue Line"
+        },
+        {
+          "line": {
+            "id": "3246e8aa-94c6-4e5b-94ff-7c554dc206ea",
+            "name": "Blue Line",
+            "color": "#0000FF"
+          },
+          "from": "Barakhamba Road",
+          "to": "Akshardham",
+          "stops": [
+            "Barakhamba Road", "Mandi House", "Pragati Maidan",
+            "Indraprastha", "Yamuna Bank", "Akshardham"
+          ],
+          "stopCount": 6
+        }
+      ]
+    }
+  }
+  ```
+
+  **No path found response:** `200 OK`
+  ```json
+  {
+    "path": null,
+    "message": "No route found between \"Stop A\" and \"Stop B\""
+  }
+  ```
+
+---
+
+### 7. Graph Management (Admin Only)
+
+* **POST `/metro/refresh-graph`**
+  Rebuild the in-memory metro graph from the database. Call this after adding/removing stops or routes via the admin APIs.
+
+  **Response:** `200 OK`
+  ```json
+  {
+    "message": "Metro graph rebuilt successfully"
+  }
+  ```
+
+  > **Note:** The graph is automatically built on server startup. You only need this endpoint if you modify metro data while the server is running.
+
+---
+
 ### Error Responses
 
 | Status | Meaning | Example Cause |
 |--------|---------|---------------|
-| `400` | Bad request | Missing required fields, invalid stop IDs |
+| `400` | Bad request | Missing required fields, invalid stop IDs, same source & destination |
 | `401` | Unauthorized | Missing or invalid JWT token |
 | `403` | Forbidden | Non-admin user accessing admin endpoints |
 | `404` | Not found | Stop or route ID doesn't exist |
 | `409` | Conflict | Duplicate stop name or route name |
 | `500` | Internal server error | Unexpected server error |
+| `503` | Service unavailable | Metro graph not loaded yet |
+

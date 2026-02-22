@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import prisma from "./db";
 import authRouter from "./routes/auth";
 import metroRouter from "./routes/metro";
+import { buildGraph } from "./services/graph";
 
 const app = express()
 app.use(express.json());
@@ -33,6 +34,15 @@ app.get('/test-health', async (req: Request, res: Response) => {
     }
 })
 
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server is running on port ${port}`)
+
+    // Build the metro graph on startup
+    try {
+        await buildGraph();
+        console.log('[Startup] Metro graph loaded successfully');
+    } catch (err) {
+        console.error('[Startup] Failed to build metro graph:', err);
+        console.log('[Startup] Route finding will not work until graph is refreshed');
+    }
 })
