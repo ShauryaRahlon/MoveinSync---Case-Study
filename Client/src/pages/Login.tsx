@@ -53,6 +53,14 @@ export default function Login() {
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
 
+                <p className="link" style={{ textAlign: 'center', marginTop: '15px' }}>
+                    Want to just explore? <a href="#" onClick={(e) => {
+                        e.preventDefault();
+                        setEmail('test@example.com');
+                        setPassword('password123');
+                    }}>Fill Test Credentials</a>
+                </p>
+
                 <p className="link">
                     Don't have an account? <Link to="/register">Register</Link>
                 </p>
