@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware';
 import {
     findOptimalRoute,
+    findOptimalRouteCached,
     buildGraph,
     isGraphReady,
     stopExistsInGraph,
@@ -59,8 +60,8 @@ export const findRoute = async (req: AuthRequest, res: Response): Promise<void> 
         }
         const strategy = strategyParam as OptimizationStrategy;
 
-        // 6. Find the route
-        const result = findOptimalRoute(from, to, strategy);
+        // 6. Find the route (with Redis cache)
+        const { result, cacheHit } = await findOptimalRouteCached(from, to, strategy);
 
         if (!result) {
             res.status(200).json({
@@ -72,6 +73,7 @@ export const findRoute = async (req: AuthRequest, res: Response): Promise<void> 
 
         res.json({
             strategy: strategyParam,
+            cacheHit,
             route: result,
         });
 

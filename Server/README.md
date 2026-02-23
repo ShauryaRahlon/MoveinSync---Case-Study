@@ -558,6 +558,23 @@ Bookings auto-expire after **24 hours** (like DMRC). Status flow: `CONFIRMED →
     "message": "Booking has expired"
   }
   ```
+   **After Caching with Redis:**
+   
+   (Test URL->http://localhost:3000/metro/find-route?from=7a265908-bf3d-45e2-a3fa-551af1d898a7&to=5cb80dbe-1bf9-40c5-9078-59f5dc3fa93c&strategy=balanced)
+  ```json
+  {
+    "CacheHit": True,
+    "Before": "User searches → Dijkstra's runs (1-5ms)",
+    "After":  "User searches → Redis lookup (0.1ms), cache miss → Dijkstra's → store in Redis"
+  }
+
+  First hit: GET /metro/find-route?from=...&to=...&strategy=balanced → "cacheHit": false
+  
+  Same route again: → "cacheHit": true 
+  
+  POST /metro/refresh-graph → clears the cache, next search will be cacheHit: false again
+  ```
+
 
 ---
 

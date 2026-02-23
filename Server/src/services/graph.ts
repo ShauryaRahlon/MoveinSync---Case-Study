@@ -1,4 +1,5 @@
 import prisma from '../db';
+import redis from './redis';
 
 // ─── TYPES ──────────────────────────────────────────────────────
 
@@ -124,6 +125,13 @@ export async function buildGraph(): Promise<void> {
     const stopCount = stopNames.size;
     const edgeCount = Array.from(graph.values()).reduce((sum, edges) => sum + edges.length, 0);
     console.log(`[Graph] Built with ${stopCount} stops and ${edgeCount} edges`);
+
+    const keys = await redis.keys('route:*')
+
+    if (keys.length > 0) {
+        await redis.del(...keys)
+        console.log(`graph cleared ${keys.length} cached routes`)
+    }
 }
 
 /**
@@ -375,4 +383,43 @@ export function stopExistsInGraph(stopId: string): boolean {
 
 export function getStopName(stopId: string): string | undefined {
     return stopNames.get(stopId);
+}
+
+// ─── CACHED ROUTE FINDING ───────────────────────────────────────
+
+/**
+ * Wrapper around findOptimalRoute that checks Redis cache first.
+ * First request: runs Dijkstra's, stores result in Redis (1 hour TTL)
+ * Repeat requests: returns cached result instantly
+ */
+export async function findOptimalRouteCached(
+    sourceStopId: string,
+    destStopId: string,
+    strategy: OptimizationStrategy = OptimizationStrategy.BALANCED
+): Promise<{ result: RouteResult | null; cacheHit: boolean }> {
+
+    // 1. Check Redis cache
+    const cacheKey = `route:${sourceStopId}:${destStopId}:${strategy}`;
+    try {
+        const cached = await redis.get(cacheKey);
+        if (cached) {
+            return { result: JSON.parse(cached), cacheHit: true };
+        }
+    } catch (err) {
+        console.error('[Redis] Cache read error:', err);
+    }
+
+    // 2. Cache miss — run Dijkstra's
+    const result = findOptimalRoute(sourceStopId, destStopId, strategy);
+
+    // 3. Store in Redis for 1 hour
+    if (result) {
+        try {
+            await redis.set(cacheKey, JSON.stringify(result), 'EX', 3600);
+        } catch (err) {
+            console.error('[Redis] Cache write error:', err);
+        }
+    }
+
+    return { result, cacheHit: false };
 }
