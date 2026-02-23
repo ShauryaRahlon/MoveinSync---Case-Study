@@ -1,0 +1,63 @@
+import { useState, FormEvent } from 'react';
+import { useAuth } from '../auth';
+import { Link, useNavigate } from 'react-router-dom';
+
+export default function Login() {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+        try {
+            await login(email, password);
+            navigate('/dashboard');
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'Login failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-page">
+            <form className="auth-form" onSubmit={handleSubmit}>
+                <h1>Login</h1>
+                <p className="subtitle">Metro Booking Service</p>
+
+                {error && <div className="error">{error}</div>}
+
+                <label>Email</label>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@email.com"
+                    required
+                />
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                />
+
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Logging in...' : 'Login'}
+                </button>
+
+                <p className="link">
+                    Don't have an account? <Link to="/register">Register</Link>
+                </p>
+            </form>
+        </div>
+    );
+}

@@ -10,6 +10,9 @@ const router = Router();
 // Find optimal route between two stops
 router.get('/find-route', authenticate, routeController.findRoute);
 
+// List all stops (needed for frontend stop picker)
+router.get('/stops', authenticate, metroController.getAllStops);
+
 // ─── ADMIN-ONLY ROUTES ──────────────────────────────────────────
 
 // Rebuild the in-memory graph after data changes
@@ -18,7 +21,6 @@ router.post('/refresh-graph', authenticate, authorizeAdmin, routeController.refr
 // ─── STOP ROUTES (admin only) ───────────────────────────────────
 
 router.post('/stops', authenticate, authorizeAdmin, metroController.createStop);
-router.get('/stops', authenticate, authorizeAdmin, metroController.getAllStops);
 router.get('/stops/:id', authenticate, authorizeAdmin, metroController.getStopById);
 router.put('/stops/:id', authenticate, authorizeAdmin, metroController.updateStop);
 router.delete('/stops/:id', authenticate, authorizeAdmin, metroController.deleteStop);

@@ -1,0 +1,553 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #fafafa;
+    color: #111;
+    line-height: 1.5;
+}
+
+/* ─── NAVBAR ──────────────────────────────────────────────────── */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    height: 56px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+.nav-brand {
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #111;
+    letter-spacing: -0.5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+}
+
+.nav-links a:hover {
+    color: #111;
+}
+
+.logout-btn {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #555;
+}
+
+.logout-btn:hover {
+    border-color: #111;
+    color: #111;
+}
+
+/* ─── AUTH PAGES ──────────────────────────────────────────────── */
+
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-form {
+    width: 100%;
+    max-width: 360px;
+}
+
+.auth-form h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.auth-form .subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 28px;
+}
+
+.auth-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    color: #333;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+}
+
+.auth-form input:focus {
+    border-color: #111;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 24px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background: #333;
+}
+
+.auth-form button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.auth-form .link {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #888;
+}
+
+.auth-form .link a {
+    color: #111;
+    text-decoration: underline;
+}
+
+/* ─── PAGE LAYOUT ─────────────────────────────────────────────── */
+
+.page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 20px;
+}
+
+.page h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin-bottom: 0;
+}
+
+/* ─── BUTTONS ─────────────────────────────────────────────────── */
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.btn:hover {
+    background: #333;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.back-btn:hover {
+    color: #111;
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 24px;
+    background: #fff;
+    color: #111;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    border-color: #111;
+}
+
+/* ─── ERROR ───────────────────────────────────────────────────── */
+
+.error {
+    background: #fff0f0;
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+/* ─── EMPTY STATE ─────────────────────────────────────────────── */
+
+.empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: #888;
+}
+
+.empty a {
+    color: #111;
+    text-decoration: underline;
+}
+
+/* ─── BOOKING CARDS ───────────────────────────────────────────── */
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.booking-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #111;
+    background: #fff;
+}
+
+.booking-card:hover {
+    border-color: #111;
+}
+
+.booking-route {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.arrow {
+    margin: 0 8px;
+    color: #999;
+}
+
+.booking-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-size: 12px;
+}
+
+.date {
+    color: #888;
+}
+
+/* ─── STATUS BADGES ───────────────────────────────────────────── */
+
+.status-confirmed {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-cancelled {
+    background: #fafafa;
+    color: #999;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-expired {
+    background: #fff3e0;
+    color: #e65100;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* ─── BOOKING DETAIL ──────────────────────────────────────────── */
+
+.booking-detail h1 {
+    font-size: 18px;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.detail-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+
+.detail-meta strong {
+    color: #888;
+    font-weight: 500;
+}
+
+/* ─── ROUTE SEGMENTS ──────────────────────────────────────────── */
+
+.segments {
+    margin-bottom: 24px;
+}
+
+.segments h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.segment {
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    background: #fff;
+}
+
+.segment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.line-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.stop-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: #888;
+    font-weight: 400;
+}
+
+.segment-stops {
+    font-size: 13px;
+    color: #666;
+    padding-left: 18px;
+}
+
+.interchange {
+    padding: 8px 14px;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.interchange-marker {
+    font-size: 13px;
+    color: #555;
+}
+
+.line-change {
+    display: block;
+    font-size: 11px;
+    color: #999;
+}
+
+/* ─── QR SECTION ──────────────────────────────────────────────── */
+
+.qr-section {
+    text-align: center;
+}
+
+.qr-section h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+}
+
+.qr-wrapper {
+    display: inline-block;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+}
+
+.qr-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* ─── BOOK FORM ───────────────────────────────────────────────── */
+
+.book-form {
+    max-width: 400px;
+}
+
+.book-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    color: #333;
+}
+
+.book-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    cursor: pointer;
+}
+
+.book-form select:focus {
+    border-color: #111;
+}
+
+.book-form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 24px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.book-form button:hover {
+    background: #333;
+}
+
+.book-form button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* ─── STOP PICKER (searchable dropdown) ──────────────────────── */
+
+.stop-picker {
+    position: relative;
+    margin-top: 16px;
+}
+
+.stop-picker label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.stop-picker input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+}
+
+.stop-picker input:focus {
+    border-color: #111;
+}
+
+.stop-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    list-style: none;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.stop-dropdown li {
+    padding: 10px 12px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.stop-dropdown li:hover {
+    background: #f5f5f5;
+}
+
+.stop-dropdown li.more {
+    color: #999;
+    font-size: 12px;
+    cursor: default;
+}
