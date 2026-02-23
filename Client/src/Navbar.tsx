@@ -17,11 +17,10 @@ export default function Navbar() {
     return (
         <nav className="navbar">
             <Link to="/dashboard" className="nav-brand">
-                <img src="/logo.png" alt="MoveInSync" className="nav-logo" />
-                MoveInSync Metro
+                <img src="https://moveinsync.com/wp-content/uploads/2020/03/Header-Logo-White.svg" alt="MoveInSync" className="nav-logo" />
             </Link>
             <div className="nav-links">
-                <Link to="/dashboard">Bookings</Link>
+
                 <Link to="/book">Book</Link>
                 <div className="nav-profile" title={user.email}>
                     <span className="avatar">{initial}</span>
