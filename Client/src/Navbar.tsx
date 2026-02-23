@@ -16,7 +16,10 @@ export default function Navbar() {
 
     return (
         <nav className="navbar">
-            <Link to="/dashboard" className="nav-brand">Metro</Link>
+            <Link to="/dashboard" className="nav-brand">
+                <img src="/logo.png" alt="MoveInSync" className="nav-logo" />
+                MoveInSync Metro
+            </Link>
             <div className="nav-links">
                 <Link to="/dashboard">Bookings</Link>
                 <Link to="/book">Book</Link>

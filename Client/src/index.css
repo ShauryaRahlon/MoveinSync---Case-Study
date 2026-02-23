@@ -65,11 +65,20 @@ body {
 }
 
 .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 18px;
     font-weight: 700;
     text-decoration: none;
     color: #111;
     letter-spacing: -0.5px;
+}
+
+.nav-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
 }
 
 .nav-links {
