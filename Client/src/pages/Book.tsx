@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../toast';
 import { metroAPI, bookingAPI } from '../api';
 
 interface Stop { id: string; name: string; }
@@ -16,14 +17,12 @@ function StopPicker({ label, stops, value, onChange }: {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
-    // Set display name when value changes externally
     useEffect(() => {
         const stop = stops.find(s => s.id === value);
         if (stop) setQuery(stop.name);
         else setQuery('');
     }, [value, stops]);
 
-    // Close dropdown on outside click
     useEffect(() => {
         const handler = (e: MouseEvent) => {
             if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -72,31 +71,31 @@ function StopPicker({ label, stops, value, onChange }: {
 
 export default function Book() {
     const navigate = useNavigate();
+    const { toast } = useToast();
     const [stops, setStops] = useState<Stop[]>([]);
     const [source, setSource] = useState('');
     const [dest, setDest] = useState('');
     const [strategy, setStrategy] = useState('balanced');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
 
     useEffect(() => {
         metroAPI.getStops().then(res => {
             const sorted = (res.data.stops || []).sort((a: Stop, b: Stop) => a.name.localeCompare(b.name));
             setStops(sorted);
-        }).catch(() => setError('Failed to load stops'));
+        }).catch(() => toast('Failed to load stops', 'error'));
     }, []);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!source || !dest) return setError('Select both stops');
-        if (source === dest) return setError('Source and destination must be different');
-        setError('');
+        if (!source || !dest) return toast('Select both stops', 'error');
+        if (source === dest) return toast('Source and destination must be different', 'error');
         setLoading(true);
         try {
             const res = await bookingAPI.create(source, dest, strategy);
+            toast('Ticket booked!', 'success');
             navigate(`/booking/${res.data.booking.id}`);
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Booking failed');
+            toast(err.response?.data?.error || 'Booking failed', 'error');
         } finally {
             setLoading(false);
         }
@@ -107,8 +106,6 @@ export default function Book() {
             <h1>Book a Ticket</h1>
 
             <form className="book-form" onSubmit={handleSubmit}>
-                {error && <div className="error">{error}</div>}
-
                 <StopPicker label="From" stops={stops} value={source} onChange={setSource} />
                 <StopPicker label="To" stops={stops} value={dest} onChange={setDest} />
 

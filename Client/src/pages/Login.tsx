@@ -1,24 +1,25 @@
 import { useState, FormEvent } from 'react';
 import { useAuth } from '../auth';
+import { useToast } from '../toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const { login } = useAuth();
+    const { toast } = useToast();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setError('');
         setLoading(true);
         try {
             await login(email, password);
+            toast('Login successful', 'success');
             navigate('/dashboard');
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Login failed');
+            toast(err.response?.data?.error || 'Login failed', 'error');
         } finally {
             setLoading(false);
         }
@@ -29,8 +30,6 @@ export default function Login() {
             <form className="auth-form" onSubmit={handleSubmit}>
                 <h1>Login</h1>
                 <p className="subtitle">Metro Booking Service</p>
-
-                {error && <div className="error">{error}</div>}
 
                 <label>Email</label>
                 <input

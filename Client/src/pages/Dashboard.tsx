@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useToast } from '../toast';
 import { bookingAPI } from '../api';
 
 interface Booking {
@@ -13,24 +14,16 @@ interface Booking {
 }
 
 export default function Dashboard() {
+    const { toast } = useToast();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
 
     useEffect(() => {
-        fetchBookings();
+        bookingAPI.myBookings()
+            .then(res => setBookings(res.data.bookings))
+            .catch(err => toast(err.response?.data?.error || 'Failed to load bookings', 'error'))
+            .finally(() => setLoading(false));
     }, []);
-
-    const fetchBookings = async () => {
-        try {
-            const res = await bookingAPI.myBookings();
-            setBookings(res.data.bookings);
-        } catch (err: any) {
-            setError(err.response?.data?.error || 'Failed to load bookings');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const statusClass = (status: string) => {
         if (status === 'CONFIRMED') return 'status-confirmed';
@@ -47,8 +40,6 @@ export default function Dashboard() {
                 <h1>My Bookings</h1>
                 <Link to="/book" className="btn">+ Book a Ticket</Link>
             </div>
-
-            {error && <div className="error">{error}</div>}
 
             {bookings.length === 0 ? (
                 <div className="empty">

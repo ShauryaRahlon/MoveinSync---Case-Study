@@ -1,25 +1,26 @@
 import { useState, FormEvent } from 'react';
 import { useAuth } from '../auth';
+import { useToast } from '../toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
     const { register } = useAuth();
+    const { toast } = useToast();
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        setError('');
         setLoading(true);
         try {
             await register(name, email, password);
+            toast('OTP sent to your email', 'success');
             navigate('/verify-otp', { state: { email } });
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Registration failed');
+            toast(err.response?.data?.error || 'Registration failed', 'error');
         } finally {
             setLoading(false);
         }
@@ -30,8 +31,6 @@ export default function Register() {
             <form className="auth-form" onSubmit={handleSubmit}>
                 <h1>Register</h1>
                 <p className="subtitle">Create your account</p>
-
-                {error && <div className="error">{error}</div>}
 
                 <label>Name</label>
                 <input

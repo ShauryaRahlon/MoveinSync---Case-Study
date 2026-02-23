@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
+import { useToast } from '../toast';
 import { bookingAPI } from '../api';
 
 interface BookingDetail {
@@ -23,16 +24,16 @@ interface BookingDetail {
 export default function BookingDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { toast } = useToast();
     const [booking, setBooking] = useState<BookingDetail | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
     const [cancelling, setCancelling] = useState(false);
 
     useEffect(() => {
         if (!id) return;
         bookingAPI.getById(id)
             .then(res => setBooking(res.data.booking))
-            .catch(err => setError(err.response?.data?.error || 'Failed to load booking'))
+            .catch(err => toast(err.response?.data?.error || 'Failed to load booking', 'error'))
             .finally(() => setLoading(false));
     }, [id]);
 
@@ -42,15 +43,15 @@ export default function BookingDetail() {
         try {
             await bookingAPI.cancel(id);
             setBooking(prev => prev ? { ...prev, status: 'CANCELLED' } : null);
+            toast('Booking cancelled', 'info');
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Failed to cancel');
+            toast(err.response?.data?.error || 'Failed to cancel', 'error');
         } finally {
             setCancelling(false);
         }
     };
 
     if (loading) return <div className="page"><p>Loading...</p></div>;
-    if (error) return <div className="page"><div className="error">{error}</div></div>;
     if (!booking) return <div className="page"><p>Booking not found</p></div>;
 
     const isActive = booking.status === 'CONFIRMED';
@@ -75,7 +76,6 @@ export default function BookingDetail() {
                     <div><strong>Transfers:</strong> {booking.routeDetails.totalTransfers}</div>
                 </div>
 
-                {/* Route Segments */}
                 <div className="segments">
                     <h2>Route</h2>
                     {booking.routeDetails.segments.map((seg: any, i: number) => (
@@ -101,7 +101,6 @@ export default function BookingDetail() {
                     ))}
                 </div>
 
-                {/* QR Code */}
                 {isActive && !isExpired && (
                     <div className="qr-section">
                         <h2>Your Ticket QR</h2>
