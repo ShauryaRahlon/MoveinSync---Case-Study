@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Book from './pages/Book';
 import BookingDetail from './pages/BookingDetail';
+import VerifyOTP from './pages/VerifyOTP';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const { token, isLoading } = useAuth();
@@ -28,6 +29,7 @@ function AppRoutes() {
             <Routes>
                 <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
                 <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+                <Route path="/verify-otp" element={<PublicRoute><VerifyOTP /></PublicRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/book" element={<ProtectedRoute><Book /></ProtectedRoute>} />
                 <Route path="/booking/:id" element={<ProtectedRoute><BookingDetail /></ProtectedRoute>} />

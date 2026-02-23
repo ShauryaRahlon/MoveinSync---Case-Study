@@ -68,7 +68,7 @@ model Booking {
   createdAt         DateTime @default(now())
   expiresAt         DateTime
 
-  user              User     @relation(fields: [userId], references: [id]) // <-- Relation mapping
-  sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id])
-  destinationStop   Stop     @relation("DestStop", fields: [destinationStopId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id], onDelete: Cascade)
+  destinationStop   Stop     @relation("DestStop", fields: [destinationStopId], references: [id], onDelete: Cascade)
 }

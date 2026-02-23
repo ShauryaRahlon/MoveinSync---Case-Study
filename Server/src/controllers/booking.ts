@@ -62,6 +62,10 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
             res.status(400).json({ error: 'No route found between these stops. Booking not created.' });
             return;
         }
+        if (err.message === 'DUPLICATE_BOOKING') {
+            res.status(409).json({ error: 'You already have an active ticket for this route. Use or cancel it first.' });
+            return;
+        }
         console.error('Error creating booking:', err);
         res.status(500).json({ error: 'Internal server error' });
     }

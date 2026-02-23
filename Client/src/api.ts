@@ -37,6 +37,9 @@ export const authAPI = {
 
     register: (name: string, email: string, password: string) =>
         api.post('/auth/register', { name, email, password }),
+
+    verify: (email: string, otp: string) =>
+        api.post('/auth/verify', { email, otp }),
 };
 
 // ─── METRO ──────────────────────────────────────────────────────

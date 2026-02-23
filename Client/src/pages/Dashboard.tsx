@@ -35,6 +35,7 @@ export default function Dashboard() {
     const statusClass = (status: string) => {
         if (status === 'CONFIRMED') return 'status-confirmed';
         if (status === 'CANCELLED') return 'status-cancelled';
+        if (status === 'USED') return 'status-used';
         return 'status-expired';
     };
 

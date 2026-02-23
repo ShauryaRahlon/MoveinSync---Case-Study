@@ -2,7 +2,12 @@ import crypto from 'crypto';
 import prisma from '../db';
 import { findOptimalRoute, stopExistsInGraph, OptimizationStrategy } from './graph';
 
-const EXPIRY_HOURS = 24;
+// Returns 11:59:59 PM of today
+function getEndOfDay(): Date {
+    const d = new Date();
+    d.setHours(23, 59, 59, 999);
+    return d;
+}
 
 // ─── QR STRING GENERATION ───────────────────────────────────────
 
@@ -36,6 +41,21 @@ export async function createBooking(
     destStopId: string,
     strategy: OptimizationStrategy = OptimizationStrategy.BALANCED
 ) {
+    // Check for duplicate active booking (same user, same route, still valid)
+    const existing = await prisma.booking.findFirst({
+        where: {
+            userId,
+            sourceStopId,
+            destinationStopId: destStopId,
+            status: 'CONFIRMED',
+            expiresAt: { gt: new Date() },
+        },
+    });
+
+    if (existing) {
+        throw new Error('DUPLICATE_BOOKING');
+    }
+
     // Find the optimal route
     const routeResult = findOptimalRoute(sourceStopId, destStopId, strategy);
 
@@ -43,8 +63,8 @@ export async function createBooking(
         throw new Error('NO_ROUTE');
     }
 
-    // Set expiry to 24 hours from now
-    const expiresAt = new Date(Date.now() + EXPIRY_HOURS * 60 * 60 * 1000);
+    // Expires at 11:59 PM today
+    const expiresAt = getEndOfDay();
 
     // Create the booking in DB
     const booking = await prisma.booking.create({
@@ -222,5 +242,16 @@ export async function validateQR(qrString: string) {
         return { valid: false, message: 'Booking has expired', booking };
     }
 
-    return { valid: true, message: 'Valid ticket', booking };
+    if (booking.status === 'USED') {
+        return { valid: false, message: 'Ticket has already been used', booking };
+    }
+
+    // Mark ticket as USED (scanned at gate)
+    await prisma.booking.update({
+        where: { id: booking.id },
+        data: { status: 'USED' },
+    });
+    booking.status = 'USED';
+
+    return { valid: true, message: 'Valid ticket — entry granted', booking };
 }

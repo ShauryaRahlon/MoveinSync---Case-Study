@@ -17,7 +17,7 @@ export default function Register() {
         setLoading(true);
         try {
             await register(name, email, password);
-            navigate('/login');
+            navigate('/verify-otp', { state: { email } });
         } catch (err: any) {
             setError(err.response?.data?.error || 'Registration failed');
         } finally {
