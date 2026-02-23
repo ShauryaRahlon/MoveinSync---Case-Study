@@ -443,14 +443,132 @@ The metro graph is built **once** on server startup and cached in memory. Route 
 
 ---
 
+### 8. Booking Service
+
+> **Auth Required:** `Authorization: Bearer <JWT>` — any authenticated user.
+
+Bookings auto-expire after **24 hours** (like DMRC). Status flow: `CONFIRMED → EXPIRED` (auto) or `CONFIRMED → CANCELLED` (manual).
+
+* **POST `/booking/create`**
+  Create a booking between two stops. System finds the optimal route, saves it, and generates a tamper-resistant QR string.
+
+  **Request Body:**
+  ```json
+  {
+    "sourceStopId": "d695fbb3-2b86-48fc-b46d-6b09bc66d936",
+    "destinationStopId": "1d29c982-eb36-48c3-a32b-4f1be1477dde",
+    "strategy": "balanced"
+  }
+  ```
+
+  **Response:** `201 Created`
+  ```json
+  {
+    "message": "Booking created successfully",
+    "booking": {
+      "id": "26f8202d-b96c-4e11-a83a-e8ccaee01323",
+      "userId": "...",
+      "sourceStopId": "...",
+      "destinationStopId": "...",
+      "qrString": "MIS_26f8202d-b96c-4e11-a83a-e8ccaee01323_a1b2c3...",
+      "routeDetails": {
+        "source": "Adarsh Nagar",
+        "destination": "Akshardham",
+        "totalStops": 18,
+        "totalTransfers": 1,
+        "segments": [ "..." ]
+      },
+      "status": "CONFIRMED",
+      "expiresAt": "2026-02-24T04:00:00.000Z",
+      "createdAt": "2026-02-23T04:00:00.000Z",
+      "sourceStop": { "id": "...", "name": "Adarsh Nagar" },
+      "destinationStop": { "id": "...", "name": "Akshardham" }
+    }
+  }
+  ```
+
+  > If no route exists between the stops, returns `400` and **no booking is created**.
+
+* **GET `/booking/my-bookings`**
+  List all bookings for the current user (newest first). Expired bookings are auto-marked.
+
+  **Response:** `200 OK`
+  ```json
+  {
+    "bookings": [ { "...booking objects..." } ]
+  }
+  ```
+
+* **GET `/booking/:id`**
+  Get a specific booking. Users can only see their own bookings.
+
+  **Response:** `200 OK` — Same structure as the booking object above.
+
+* **GET `/booking/:id/qr-image`**
+  Returns the actual QR code as a **PNG image** (300×300px). In Postman you'll see the image directly in the response.
+
+  ```
+  GET http://localhost:3000/booking/26f8202d-b96c-4e11-a83a-e8ccaee01323/qr-image
+  ```
+
+  **Response:** `200 OK` with `Content-Type: image/png`
+
+* **POST `/booking/:id/cancel`**
+  Cancel a confirmed booking. Users can only cancel their own bookings.
+
+  **Response:** `200 OK`
+  ```json
+  {
+    "message": "Booking cancelled successfully",
+    "booking": { "status": "CANCELLED", "..." : "..." }
+  }
+  ```
+
+* **POST `/booking/validate-qr`**
+  Validate a QR string. Checks HMAC signature to detect tampering, and checks booking status/expiry.
+
+  **Request Body:**
+  ```json
+  {
+    "qrString": "MIS_26f8202d-b96c-4e11-a83a-e8ccaee01323_a1b2c3..."
+  }
+  ```
+
+  **Valid ticket response:**
+  ```json
+  {
+    "valid": true,
+    "message": "Valid ticket",
+    "booking": { "..." : "..." }
+  }
+  ```
+
+  **Tampered QR response:**
+  ```json
+  {
+    "valid": false,
+    "message": "QR string has been tampered with"
+  }
+  ```
+
+  **Expired/Cancelled response:**
+  ```json
+  {
+    "valid": false,
+    "message": "Booking has expired"
+  }
+  ```
+
+---
+
 ### Error Responses
 
 | Status | Meaning | Example Cause |
 |--------|---------|---------------|
-| `400` | Bad request | Missing required fields, invalid stop IDs, same source & destination |
+| `400` | Bad request | Missing fields, same source & dest, no route, already cancelled |
 | `401` | Unauthorized | Missing or invalid JWT token |
-| `403` | Forbidden | Non-admin user accessing admin endpoints |
-| `404` | Not found | Stop or route ID doesn't exist |
+| `403` | Forbidden | Accessing another user's booking, non-admin on admin endpoints |
+| `404` | Not found | Stop, route, or booking ID doesn't exist |
 | `409` | Conflict | Duplicate stop name or route name |
 | `500` | Internal server error | Unexpected server error |
 | `503` | Service unavailable | Metro graph not loaded yet |

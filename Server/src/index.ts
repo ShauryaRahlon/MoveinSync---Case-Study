@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import prisma from "./db";
 import authRouter from "./routes/auth";
 import metroRouter from "./routes/metro";
+import bookingRouter from "./routes/booking";
 import { buildGraph } from "./services/graph";
 
 const app = express()
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000
 
 app.use('/auth', authRouter);
 app.use('/metro', metroRouter);
+app.use('/booking', bookingRouter);
 
 app.get('/', (req: Request, res: Response) => {
     res.json({

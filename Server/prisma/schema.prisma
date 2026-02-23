@@ -66,6 +66,7 @@ model Booking {
   routeDetails      Json     
   status            String   @default("CONFIRMED")
   createdAt         DateTime @default(now())
+  expiresAt         DateTime
 
   user              User     @relation(fields: [userId], references: [id]) // <-- Relation mapping
   sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id])
