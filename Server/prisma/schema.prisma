@@ -6,69 +6,59 @@ datasource db {
   provider = "postgresql"
 }
 
-
-
-
-// Models a system user
 model User {
   id              String    @id @default(uuid())
   email           String    @unique
-  password        String    // Stores the hashed password
+  password        String
   name            String
-  role            String    @default("USER") 
-  isVerified      Boolean   @default(false) // <-- Tracks if email is verified
-  verificationOtp String?                   // <-- Stores the temporary 6-digit OTP
-  otpExpiry       DateTime?                 // <-- Expiration timestamp for the OTP
-  bookings        Booking[]
+  role            String    @default("USER")
+  isVerified      Boolean   @default(false)
+  verificationOtp String?
+  otpExpiry       DateTime?
   createdAt       DateTime  @default(now())
+  bookings        Booking[]
 }
 
-// Models a physical Metro Stop
 model Stop {
   id               String      @id @default(uuid())
   name             String      @unique
-  routes           RouteStop[] 
-  bookingsAsSource Booking[]   @relation("SourceStop")
-  bookingsAsDest   Booking[]   @relation("DestStop")
   createdAt        DateTime    @default(now())
+  bookingsAsDest   Booking[]   @relation("DestStop")
+  bookingsAsSource Booking[]   @relation("SourceStop")
+  routes           RouteStop[]
 }
 
-// Models a Metro Line (e.g., Yellow Line)
 model Route {
   id        String      @id @default(uuid())
   name      String      @unique
   color     String
-  stops     RouteStop[] 
   createdAt DateTime    @default(now())
+  stops     RouteStop[]
 }
 
-// Mapping table to handle the Many-to-Many relationship and maintain order
 model RouteStop {
-  id            String   @id @default(uuid())
+  id            String @id @default(uuid())
   stopId        String
   routeId       String
-  sequenceOrder Int      
-  
-  stop          Stop     @relation(fields: [stopId], references: [id], onDelete: Cascade)
-  route         Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  sequenceOrder Int
+  route         Route  @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  stop          Stop   @relation(fields: [stopId], references: [id], onDelete: Cascade)
 
   @@unique([stopId, routeId])
-  @@index([routeId, sequenceOrder]) 
+  @@index([routeId, sequenceOrder])
 }
 
-// Models the user's generated ticket/route
 model Booking {
   id                String   @id @default(uuid())
-  userId            String   // <-- Links the booking to a specific user
+  userId            String
   sourceStopId      String
   destinationStopId String
-  qrString          String   @unique 
-  routeDetails      Json     
+  qrString          String   @unique
+  routeDetails      Json
   status            String   @default("CONFIRMED")
   createdAt         DateTime @default(now())
   expiresAt         DateTime
-
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id], onDelete: Cascade)
   destinationStop   Stop     @relation("DestStop", fields: [destinationStopId], references: [id], onDelete: Cascade)
+  sourceStop        Stop     @relation("SourceStop", fields: [sourceStopId], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
